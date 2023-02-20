@@ -1,1 +1,1 @@
-# diphone_synth
+# duafonia
