@@ -6,18 +6,19 @@ import pyaudio
 import argparse
 
 
-class Recorder():
+class AudioRecorder():
     def __init__(self):
         self.chunk = 1024
         self.format = pyaudio.paInt16
         self.channels = 1 if sys.platform == 'darwin' else 2
         self.rate = 44100
         self.record_seconds = 5
-        self.p = pyaudio.PyAudio()
+        self.p = None
 
     def record(self, output):
         # https://people.csail.mit.edu/hubert/pyaudio/#docs
         with wave.open(output + '.wav', 'wb') as wf:
+            self.p = pyaudio.PyAudio()
             wf.setnchannels(self.channels)
             wf.setsampwidth(self.p.get_sample_size(self.format))
             wf.setframerate(self.rate)
@@ -38,5 +39,5 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--output', help='name of output file')
     args = parser.parse_args()
 
-    recorder = Recorder()
+    recorder = AudioRecorder()
     recorder.record(args.output)

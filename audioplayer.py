@@ -8,14 +8,14 @@ import argparse
 class AudioPlayer:
     def __init__(self):
         self.chunk = 1024
-        # Instantiate PyAudio and initialize PortAudio system resources (1)
-        self.p = pyaudio.PyAudio()
         
     def play_file(self, file):
         # PyAudio Docs
         # https://people.csail.mit.edu/hubert/pyaudio/#docs
         print(f"playing: {file}")
         with wave.open(file, 'rb') as wf:
+            # Instantiate PyAudio and initialize PortAudio system resources (1)
+            self.p = pyaudio.PyAudio()
             # Open stream (2)
             stream = self.p.open(format=self.p.get_format_from_width(wf.getsampwidth()),
                             channels=wf.getnchannels(),
@@ -28,12 +28,11 @@ class AudioPlayer:
 
             # Close stream (4)
             stream.close()
+            # Release PortAudio system resources (5)
+            self.p.terminate()
         
         return
     
-    def release_portaudio(self):
-        # Release PortAudio system resources (5)
-        self.p.terminate()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -43,4 +42,3 @@ if __name__ == "__main__":
     ap = AudioPlayer()
     for arg in args.input:
         ap.play_file(arg)
-    ap.release_portaudio()
