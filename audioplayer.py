@@ -37,10 +37,10 @@ class AudioPlayer:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--files', help='files to be played', nargs='+')
+    parser.add_argument('-i', '--input', help='input files to be played', nargs='+')
     args = parser.parse_args()
     
     ap = AudioPlayer()
-    for arg in args.files:
+    for arg in args.input:
         ap.play_file(arg)
     ap.release_portaudio()
